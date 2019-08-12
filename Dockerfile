@@ -1,5 +1,6 @@
 FROM rust:latest
 
+RUN rustup default nightly
 WORKDIR /usr/src/api
 
 COPY Cargo.toml Cargo.toml
