@@ -1,2 +1,8 @@
-[global.databases]
+[development.databases]
 diesel_postgres_pool = { url = "postgres://haru:@localhost/tentech_api" }
+
+[production.databases]
+diesel_postgres_pool = { url = "postgres://haru:@localhost/tentech_api" }
+
+[staging.databases]
+diesel_postgres_pool = { url = "postgres://haru:@localhost/tentech_api_test" }
