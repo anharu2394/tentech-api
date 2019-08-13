@@ -22,5 +22,7 @@ fn index() -> &'static str {
 }
 
 pub fn rocket() -> rocket::Rocket {
-    rocket::ignite().mount("/", routes![index])
+    rocket::ignite()
+        .mount("/", routes![routes::users::post_users,])
+        .attach(db::Conn::fairing())
 }
