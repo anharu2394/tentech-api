@@ -1,7 +1,7 @@
 table! {
     users (id) {
         id -> Int4,
-        token -> Nullable<Varchar>,
+        token -> Varchar,
         username -> Varchar,
         nickname -> Varchar,
         email -> Varchar,
