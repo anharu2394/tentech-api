@@ -1,5 +1,5 @@
-use tentech-api;
+use tentech_api;
 
 fn main() {
-    tentech-api::
+    tentech_api::rocket().launch();
 }
