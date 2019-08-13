@@ -1,7 +1,7 @@
 -- Your SQL goes here
 CREATE TABLE users(
   id SERIAL PRIMARY KEY,
-  token VARCHAR UNIQUE,
+  token VARCHAR UNIQUE NOT NULL,
   username VARCHAR NOT NULL UNIQUE,
   nickname VARCHAR NOT NULL,
   email VARCHAR NOT NULL,
