@@ -43,3 +43,27 @@ pub fn post_users(new_user: Json<NewUser>, conn: db::Conn) -> Result<JsonValue, 
             Errors::new(&[(field, "has already been taken")])
         })
 }
+
+#[cfg(test)]
+mod test {
+    use crate::db;
+    use crate::rocket;
+    use crate::test_establish_connection;
+    use rocket::http::{ContentType, Status};
+    use rocket::local::Client;
+
+    fn setup() {
+        db::users::delete_all(&test_establish_connection());
+    }
+    #[test]
+    fn post_users() {
+        setup();
+        let client = Client::new(rocket()).expect("valid rocket instance");
+        let mut response = client
+            .post("/users")
+            .header(ContentType::JSON)
+            .body("{\"user\": {\"username\": \"anharu2394\", \"nickname\": \"anharu\", \"email\": \"email@test.com\", \"password\": \"passpassword\"}}")
+            .dispatch();
+        assert_eq!(response.status(), Status::Ok);
+    }
+}
