@@ -11,4 +11,5 @@ before_install:
   - docker-compose up -d
 
 script:
+  - docker-compose start
   - docker-compose exec api cargo test
