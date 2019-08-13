@@ -61,3 +61,7 @@ pub fn create(
         .get_result::<User>(conn)
         .map_err(Into::into)
 }
+
+pub fn delete_all(conn: &PgConnection) -> Result<usize, Error> {
+    diesel::delete(users::table).execute(conn)
+}
