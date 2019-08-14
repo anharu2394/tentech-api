@@ -3,6 +3,7 @@ use crate::token::encrypt;
 use chrono::offset::Local;
 use chrono::DateTime;
 use chrono::Duration;
+use percent_encoding::{percent_encode, NON_ALPHANUMERIC};
 use serde::Serialize;
 use std::time::SystemTime;
 
@@ -27,6 +28,7 @@ pub struct TokenData {
 impl User {
     pub fn prepare_activate(&self) -> Result<User, SendError> {
         let token = self.generate_token();
+        let encoded_token = percent_encode(token.as_bytes(), NON_ALPHANUMERIC).to_string();
         match send_activation_email(&self.email, &self.nickname, &token) {
             Some(err) => return Err(err),
             None => {}
