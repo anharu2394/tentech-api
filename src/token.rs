@@ -1,8 +1,10 @@
+use dotenv::dotenv;
 use fernet::DecryptionError;
 use fernet::Fernet;
 use std::env;
 
 fn fernet() -> Fernet {
+    dotenv().ok();
     fernet::Fernet::new(&env::var("FERNET_SECRET_KEY").unwrap()).unwrap()
 }
 
