@@ -10,13 +10,11 @@ use std::time::SystemTime;
 #[derive(Insertable)]
 #[table_name = "users"]
 pub struct NewUser<'a> {
-    pub token: &'a str,
     pub username: &'a str,
     pub nickname: &'a str,
     pub email: &'a str,
     pub password: &'a str,
     pub activated: &'a bool,
-    pub expired_at: &'a SystemTime,
 }
 
 pub enum UserCreationError {
