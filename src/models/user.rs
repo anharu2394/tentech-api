@@ -44,8 +44,6 @@ impl User {
     }
     pub fn to_token_data(&self) -> TokenData {
         let expired_at = SystemTime::now() + Duration::from_secs(86400);
-        let datetime: DateTime<Utc> = expired_at.into();
-        println!("{}", datetime.format("%d/%m/%Y %T"));
         TokenData {
             expired_at,
             id: self.id,
