@@ -32,6 +32,9 @@ pub fn test_establish_connection() -> PgConnection {
 
 pub fn rocket() -> rocket::Rocket {
     rocket::ignite()
-        .mount("/", routes![routes::users::post_users,])
+        .mount(
+            "/",
+            routes![routes::users::post_users, routes::users::activate,],
+        )
         .attach(db::Conn::fairing())
 }
