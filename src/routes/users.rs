@@ -1,9 +1,12 @@
 use crate::db::{self, users::UserCreationError};
 use crate::email::SendError;
 use crate::errors::{Errors, FieldValidator};
+use crate::models::user::TokenData;
+use percent_encoding::percent_decode_str;
 use rocket::http::RawStr;
 use rocket_contrib::json::{Json, JsonValue};
 use serde::Deserialize;
+use serde_json;
 use validator::Validate;
 
 #[derive(Deserialize)]
@@ -52,9 +55,17 @@ pub fn post_users(new_user: Json<NewUser>, conn: db::Conn) -> Result<JsonValue, 
 }
 
 #[get("/users/activate?<token>")]
-pub fn activate(token: String) -> JsonValue {
-    json!({ "ok": token })
+pub fn activate(token: String) -> Result<JsonValue, Errors> {
+    let url_decoded_token = percent_decode_str(&token)
+        .decode_utf8()
+        .unwrap()
+        .to_string();
+    let token_data =
+        TokenData::decode(url_decoded_token).map_err(|_| Errors::new(&[("email", "es")]))?;
+    // change activate: true
+    Ok(json!(token_data))
 }
+
 #[cfg(test)]
 mod test {
     use crate::db;
