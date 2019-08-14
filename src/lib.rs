@@ -15,6 +15,7 @@ mod errors;
 mod models;
 mod routes;
 mod schema;
+mod token;
 
 use diesel::pg::PgConnection;
 use diesel::prelude::*;
