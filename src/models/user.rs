@@ -48,3 +48,11 @@ impl User {
         }
     }
 }
+
+impl TokenData {
+    pub fn decode(token: String) -> Result<TokenData, DecryptionError> {
+        let bytes_text = decrypt(&token)?;
+        let string_text = String::from_utf8(bytes_text).unwrap();
+        Ok(serde_json::from_str::<TokenData>(&string_text).unwrap())
+    }
+}
