@@ -1,13 +1,14 @@
 use crate::email::{send_activation_email, SendError};
-use crate::token::encrypt;
+use crate::token::{decrypt, encrypt};
 use chrono::offset::Local;
 use chrono::DateTime;
 use chrono::Duration;
+use fernet::DecryptionError;
 use percent_encoding::{percent_encode, NON_ALPHANUMERIC};
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use std::time::SystemTime;
 
-#[derive(Clone, Queryable, Serialize)]
+#[derive(Clone, Queryable, Serialize, Deserialize)]
 pub struct User {
     pub id: i32,
     pub username: String,
@@ -18,7 +19,7 @@ pub struct User {
     pub activated_at: Option<SystemTime>,
 }
 
-#[derive(Clone, Queryable, Serialize)]
+#[derive(Clone, Queryable, Serialize, Deserialize)]
 pub struct TokenData {
     #[serde(flatten)]
     pub user: User,
