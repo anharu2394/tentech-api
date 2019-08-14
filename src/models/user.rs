@@ -13,3 +13,7 @@ pub struct User {
     pub activated_at: Option<SystemTime>,
     pub expired_at: SystemTime,
 }
+
+impl User {
+    pub fn prepare_activate(&self) {}
+}
