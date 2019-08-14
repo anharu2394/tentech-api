@@ -47,13 +47,11 @@ pub fn create(
     let hash = &scrypt_simple(password, &ScryptParams::new(14, 8, 1)).expect("hash error");
 
     let new_user = &NewUser {
-        token: "a3cfs4hkt2f64g8df",
         username,
         nickname,
         email,
         password: hash,
         activated: &false,
-        expired_at: &SystemTime::now(),
     };
 
     diesel::insert_into(users::table)
