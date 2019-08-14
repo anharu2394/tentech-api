@@ -19,6 +19,8 @@ bcrypt = "0.2.0"
 validator = "0.8.0"
 validator_derive = "0.8.0"
 rust-crypto = "0.2.36"
+lettre = "0.9.2"
+lettre_email = "0.9"
 
 [dependencies.rocket_contrib]
 version = "0.4.2"
