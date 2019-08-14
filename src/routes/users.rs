@@ -1,6 +1,7 @@
 use crate::db::{self, users::UserCreationError};
 use crate::email::SendError;
 use crate::errors::{Errors, FieldValidator};
+use rocket::http::RawStr;
 use rocket_contrib::json::{Json, JsonValue};
 use serde::Deserialize;
 use validator::Validate;
@@ -50,6 +51,10 @@ pub fn post_users(new_user: Json<NewUser>, conn: db::Conn) -> Result<JsonValue, 
         })
 }
 
+#[get("/users/activate?<token>")]
+pub fn activate(token: String) -> JsonValue {
+    json!({ "ok": token })
+}
 #[cfg(test)]
 mod test {
     use crate::db;
