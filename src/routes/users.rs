@@ -33,6 +33,7 @@ pub fn post_users(new_user: Json<NewUser>, conn: db::Conn) -> Result<JsonValue, 
 
     extractor.check()?;
 
+    // In create method, convert a password into a hash value. no worries.
     db::users::create(&conn, &username, &nickname, &email, &password)
         .map(|user| json!({ "user": user }))
         .map_err(|error| {
