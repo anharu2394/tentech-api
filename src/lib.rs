@@ -11,6 +11,7 @@ extern crate validator_derive;
 extern crate diesel;
 
 mod db;
+mod email;
 mod errors;
 mod models;
 mod routes;
