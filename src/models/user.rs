@@ -57,4 +57,7 @@ impl TokenData {
         let string_text = String::from_utf8(bytes_text).unwrap();
         Ok(serde_json::from_str::<TokenData>(&string_text).unwrap())
     }
+    pub fn check_expired(&self) -> bool {
+        Local::now() < self.expired_at
+    }
 }
