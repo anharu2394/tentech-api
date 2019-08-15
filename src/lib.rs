@@ -34,7 +34,12 @@ pub fn rocket() -> rocket::Rocket {
     rocket::ignite()
         .mount(
             "/",
-            routes![routes::users::post_users, routes::users::activate,],
+            routes![
+                routes::users::post_users,
+                routes::users::activate,
+                routes::users::login,
+                routes::users::get,
+            ],
         )
         .attach(db::Conn::fairing())
 }
