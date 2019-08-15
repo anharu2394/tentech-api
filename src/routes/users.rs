@@ -55,14 +55,15 @@ pub fn post_users(new_user: Json<NewUser>, conn: db::Conn) -> Result<JsonValue, 
 }
 
 #[get("/users/activate?<token>")]
-pub fn activate(token: String) -> Result<JsonValue, Errors> {
+pub fn activate(token: String, conn: db::Conn) -> Result<JsonValue, Errors> {
     let url_decoded_token = percent_decode_str(&token)
         .decode_utf8()
         .unwrap()
         .to_string();
-    let token_data =
-        TokenData::decode(url_decoded_token).map_err(|_| Errors::new(&[("email", "es")]))?;
-    // change activate: true
+    let token_data = TokenData::decode(url_decoded_token)
+        .map_err(|_| Errors::new(&[("activate", "decode error")]))?;
+    db::users::activate(&conn, &token_data.user)
+        .map_err(|_| Errors::new(&[("activate", "make activate true")]))?;
     Ok(json!(token_data))
 }
 
