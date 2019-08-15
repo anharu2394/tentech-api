@@ -70,3 +70,7 @@ pub fn activate(conn: &PgConnection, target: &User) -> Result<usize, Error> {
         ))
         .execute(conn)
 }
+
+pub fn find(conn: &PgConnection, id: &i32) -> Result<User, Error> {
+    users::table.find(id).first::<User>(conn)
+}
