@@ -6,6 +6,9 @@ use chrono::DateTime;
 use chrono::Duration;
 use fernet::DecryptionError;
 use percent_encoding::{percent_encode, NON_ALPHANUMERIC};
+use rocket::http::Status;
+use rocket::request::{self, FromRequest, Request};
+use rocket::Outcome;
 use serde::{Deserialize, Serialize};
 use std::time::SystemTime;
 
@@ -59,5 +62,33 @@ impl TokenData {
     }
     pub fn check_expired(&self) -> bool {
         Local::now() < self.expired_at
+    }
+}
+
+fn check_valid(key: &str) -> Result<TokenData, ()> {
+    TokenData::decode(key.to_string())
+        .map_err(|_| ())
+        .and_then(|token_data| {
+            if token_data.check_expired() {
+                Ok(token_data)
+            } else {
+                Err(())
+            }
+        })
+}
+
+impl<'a, 'r> FromRequest<'a, 'r> for TokenData {
+    type Error = ();
+
+    fn from_request(request: &'a Request<'r>) -> request::Outcome<Self, ()> {
+        let keys: Vec<_> = request.headers().get("x-api-key").collect();
+        match keys.len() {
+            0 => Outcome::Failure((Status::BadRequest, ())),
+            1 => match check_valid(keys[0]) {
+                Ok(token_data) => Outcome::Success(token_data),
+                Err(_) => Outcome::Failure((Status::BadRequest, ())),
+            },
+            _ => Outcome::Failure((Status::BadRequest, ())),
+        }
     }
 }
