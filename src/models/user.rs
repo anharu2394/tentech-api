@@ -1,4 +1,5 @@
 use crate::email::{send_activation_email, SendError};
+use crate::schema::users;
 use crate::token::{decrypt, encrypt};
 use chrono::offset::Local;
 use chrono::DateTime;
@@ -8,7 +9,8 @@ use percent_encoding::{percent_encode, NON_ALPHANUMERIC};
 use serde::{Deserialize, Serialize};
 use std::time::SystemTime;
 
-#[derive(Clone, Queryable, Serialize, Deserialize)]
+#[derive(Clone, Queryable, Serialize, Deserialize, Identifiable)]
+#[table_name = "users"]
 pub struct User {
     pub id: i32,
     pub username: String,
