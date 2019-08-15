@@ -26,6 +26,12 @@ struct NewUserData {
     password: Option<String>,
 }
 
+#[derive(Deserialize)]
+pub struct LoginUser {
+    email: String,
+    password: String,
+}
+
 #[post("/users", format = "json", data = "<new_user>")]
 pub fn post_users(new_user: Json<NewUser>, conn: db::Conn) -> Result<JsonValue, Errors> {
     let new_user = new_user.into_inner().user;
