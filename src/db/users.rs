@@ -61,3 +61,12 @@ pub fn create(
 pub fn delete_all(conn: &PgConnection) -> Result<usize, Error> {
     diesel::delete(users::table).execute(conn)
 }
+
+pub fn activate(conn: &PgConnection, target: &User) -> Result<usize, Error> {
+    diesel::update(target)
+        .set((
+            users::activated.eq(true),
+            users::activated_at.eq(SystemTime::now()),
+        ))
+        .execute(conn)
+}
