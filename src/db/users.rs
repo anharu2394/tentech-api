@@ -74,3 +74,13 @@ pub fn activate(conn: &PgConnection, target: &User) -> Result<usize, Error> {
 pub fn find(conn: &PgConnection, id: &i32) -> Result<User, Error> {
     users::table.find(id).first::<User>(conn)
 }
+
+pub fn login(conn: &PgConnection, email: &String, password: &String) -> Result<User, Error> {
+    let target = users::table
+        .filter(users::email.eq(email))
+        .first::<User>(conn)?;
+    scrypt_check(&password, &target.password)
+        .and_then(|is_same| if (!is_same) { Err("") } else { Ok(()) })
+        .map_err(|_| Error::RollbackTransaction)?;
+    Ok(target)
+}
