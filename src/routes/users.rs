@@ -85,6 +85,19 @@ pub fn activate(token: String, conn: db::Conn) -> Result<JsonValue, Errors> {
     Ok(json!(token_data))
 }
 
+#[post("/users/login", format = "json", data = "<login_user>")]
+pub fn login(login_user: Json<LoginUser>, conn: db::Conn) -> Result<JsonValue, Errors> {
+    let login_user = login_user.into_inner();
+    let target = db::users::login(&conn, &login_user.email, &login_user.password)
+        .map_err(|_| Errors::new(&[("login", "invalid")]))?;
+    let token = target.generate_token();
+    Ok(json!({ "token": token }))
+}
+
+#[get("/users/<id>")]
+pub fn get(id: i32, token: TokenData) -> String {
+    "Ok".to_string()
+}
 #[cfg(test)]
 mod test {
     use crate::db;
