@@ -62,8 +62,20 @@ pub fn activate(token: String, conn: db::Conn) -> Result<JsonValue, Errors> {
         .to_string();
     let token_data = TokenData::decode(url_decoded_token)
         .map_err(|_| Errors::new(&[("activate", "decode error")]))?;
+    let target = db::users::find(&conn, &token_data.user.id)
+        .map_err(|_| Errors::new(&[("activate", "not found user")]))?;
+    if target.activated {
+        return Err(Errors::new(&[("activate", "has already been activated")]));
+    }
     db::users::activate(&conn, &token_data.user)
         .map_err(|_| Errors::new(&[("activate", "make activate true")]))?;
+
+    if token_data.check_expired() {
+        println!("{}", "OK!");
+    } else {
+        return Err(Errors::new(&[("activate", "expired")]));
+    }
+
     Ok(json!(token_data))
 }
 
