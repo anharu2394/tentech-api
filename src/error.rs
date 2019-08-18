@@ -1,15 +1,13 @@
-use diesel;
 use rocket::http::ContentType;
 use rocket::http::Status;
 use rocket::response::Responder;
 use rocket::Request;
 use rocket::Response;
-use rocket_contrib::json::Json;
 use serde::Serialize;
 use std::error::Error;
 use std::fmt;
 use std::io::Cursor;
-use validator::{Validate, ValidationError, ValidationErrors};
+use validator::ValidationErrors;
 
 #[derive(Debug, Serialize)]
 pub enum TentechError {
