@@ -82,7 +82,7 @@ pub fn login(conn: &PgConnection, email: &String, password: &String) -> Result<U
     scrypt_check(&password, &target.password)
         .map_err(|_| TentechError::CannotVerifyPassword)
         .and_then(|is_same| {
-            if (!is_same) {
+            if !is_same {
                 Err(TentechError::CannotVerifyPassword)
             } else {
                 Ok(target)
