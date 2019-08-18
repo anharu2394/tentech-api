@@ -8,7 +8,7 @@ use validator::{Validate, ValidationError, ValidationErrors};
 
 #[derive(Debug)]
 pub struct Errors {
-    errors: ValidationErrors,
+    pub errors: ValidationErrors,
 }
 
 pub type FieldName = &'static str;
