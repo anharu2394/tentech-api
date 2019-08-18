@@ -1,13 +1,10 @@
-use crate::db::{self, users::UserCreationError};
-use crate::email::SendError;
+use crate::db;
 use crate::error::TentechError;
 use crate::models::user::TokenData;
 use crate::validation::FieldValidator;
 use percent_encoding::percent_decode_str;
-use rocket::http::RawStr;
 use rocket_contrib::json::{Json, JsonValue};
 use serde::Deserialize;
-use serde_json;
 use validator::Validate;
 
 #[derive(Deserialize)]
