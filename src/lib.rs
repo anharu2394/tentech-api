@@ -13,11 +13,11 @@ extern crate diesel;
 mod db;
 mod email;
 mod error;
-mod errors;
 mod models;
 mod routes;
 mod schema;
 mod token;
+mod validation;
 
 use diesel::pg::PgConnection;
 use diesel::prelude::*;
