@@ -35,7 +35,7 @@ impl User {
     pub fn prepare_activate(&self) -> Result<User, SendError> {
         let token = self.generate_token();
         let encoded_token = percent_encode(token.as_bytes(), NON_ALPHANUMERIC).to_string();
-        match send_activation_email(&self.email, &self.nickname, &token) {
+        match send_activation_email(&self.email, &self.nickname, &encoded_token) {
             Some(err) => return Err(err),
             None => {}
         }
