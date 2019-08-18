@@ -53,9 +53,9 @@ impl Responder<'static> for TentechError {
         let status = match self {
             TentechError::CannotDecryptToken => Status::Unauthorized,
             TentechError::CannotVerifyPassword => Status::Unauthorized,
-            TentechError::ValidationFailed(ref e) => Status::BadRequest,
+            TentechError::ValidationFailed(_) => Status::BadRequest,
             TentechError::TokenExpired => Status::BadRequest,
-            TentechError::DatabaseFailed(ref e) => Status::Conflict,
+            TentechError::DatabaseFailed(_) => Status::Conflict,
             TentechError::AlreadyActivated => Status::Conflict,
             TentechError::CannotSendEmail => Status::UnprocessableEntity,
         };
