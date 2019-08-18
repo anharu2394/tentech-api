@@ -17,8 +17,10 @@ pub enum TentechError {
     CannotVerifyPassword,
 
     ValidationFailed(ValidationErrors),
+    TokenExpired,
 
     DatabaseFailed(String),
+    AlreadyActivated,
 
     CannotSendEmail,
 }
