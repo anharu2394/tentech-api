@@ -54,7 +54,9 @@ impl Responder<'static> for TentechError {
             TentechError::CannotDecryptToken => Status::Unauthorized,
             TentechError::CannotVerifyPassword => Status::Unauthorized,
             TentechError::ValidationFailed(ref e) => Status::BadRequest,
+            TentechError::TokenExpired => Status::BadRequest,
             TentechError::DatabaseFailed(ref e) => Status::Conflict,
+            TentechError::AlreadyActivated => Status::Conflict,
             TentechError::CannotSendEmail => Status::UnprocessableEntity,
         };
         Response::build()
