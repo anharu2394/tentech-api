@@ -17,7 +17,6 @@ pub fn send_activation_email(
     let smtp_server = "smtp.gmail.com";
     let smtp_username = "haruan2394@gmail.com";
     let smtp_password = "ahsubgwbgtjxjtqh";
-    let smtp_port = 587u16;
 
     let email = Email::builder()
         .to((email, nickname))

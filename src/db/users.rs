@@ -5,7 +5,6 @@ use crypto::scrypt::{scrypt_check, scrypt_simple, ScryptParams};
 use diesel::pg::PgConnection;
 use diesel::prelude::*;
 use diesel::result::{DatabaseErrorKind, Error};
-use serde::Deserialize;
 use std::time::SystemTime;
 
 #[derive(Insertable)]
