@@ -41,7 +41,7 @@ pub fn create(
     nickname: &str,
     email: &str,
     password: &str,
-) -> Result<User, UserCreationError> {
+) -> Result<User, Error> {
     let hash = &scrypt_simple(password, &ScryptParams::new(14, 8, 1)).expect("hash error");
 
     let new_user = &NewUser {
@@ -55,7 +55,6 @@ pub fn create(
     diesel::insert_into(users::table)
         .values(new_user)
         .get_result::<User>(conn)
-        .map_err(Into::into)
 }
 
 pub fn delete_all(conn: &PgConnection) -> Result<usize, Error> {
