@@ -11,8 +11,6 @@ pub struct Errors {
     pub errors: ValidationErrors,
 }
 
-pub type FieldErrorCode = &'static str;
-
 pub struct FieldValidator {
     errors: ValidationErrors,
 }
