@@ -12,6 +12,7 @@ extern crate diesel;
 
 mod db;
 mod email;
+mod error;
 mod errors;
 mod models;
 mod routes;

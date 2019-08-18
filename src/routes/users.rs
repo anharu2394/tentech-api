@@ -1,5 +1,6 @@
 use crate::db::{self, users::UserCreationError};
 use crate::email::SendError;
+use crate::error::TentechError;
 use crate::errors::{Errors, FieldValidator};
 use crate::models::user::TokenData;
 use percent_encoding::percent_decode_str;
@@ -86,10 +87,10 @@ pub fn activate(token: String, conn: db::Conn) -> Result<JsonValue, Errors> {
 }
 
 #[post("/users/login", format = "json", data = "<login_user>")]
-pub fn login(login_user: Json<LoginUser>, conn: db::Conn) -> Result<JsonValue, Errors> {
+pub fn login(login_user: Json<LoginUser>, conn: db::Conn) -> Result<JsonValue, TentechError> {
     let login_user = login_user.into_inner();
     let target = db::users::login(&conn, &login_user.email, &login_user.password)
-        .map_err(|_| Errors::new(&[("login", "invalid")]))?;
+        .map_err(|e| TentechError::DatabaseFailed(format!("{}", e)))?;
     let token = target.generate_token();
     Ok(json!({ "token": token }))
 }
