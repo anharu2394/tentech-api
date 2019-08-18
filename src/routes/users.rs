@@ -1,8 +1,8 @@
 use crate::db::{self, users::UserCreationError};
 use crate::email::SendError;
 use crate::error::TentechError;
-use crate::errors::{Errors, FieldValidator};
 use crate::models::user::TokenData;
+use crate::validation::FieldValidator;
 use percent_encoding::percent_decode_str;
 use rocket::http::RawStr;
 use rocket_contrib::json::{Json, JsonValue};
