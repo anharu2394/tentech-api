@@ -31,7 +31,9 @@ impl fmt::Display for TentechError {
             TentechError::CannotDecryptToken => f.write_str("Cannot decrypt token"),
             TentechError::CannotVerifyPassword => f.write_str("Cannot verify password"),
             TentechError::ValidationFailed(ref e) => e.fmt(f),
+            TentechError::TokenExpired => f.write_str("Token expired"),
             TentechError::DatabaseFailed(ref m) => f.write_str(m),
+            TentechError::AlreadyActivated => f.write_str("Already activated"),
             TentechError::CannotSendEmail => f.write_str("Cannot send email"),
         }
     }
