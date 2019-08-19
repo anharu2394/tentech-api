@@ -1,11 +1,8 @@
 use lettre::smtp::authentication::{Credentials, Mechanism};
 use lettre::smtp::extension::ClientId;
 use lettre::smtp::ConnectionReuseParameters;
-use lettre::{EmailAddress, Envelope, SendableEmail, SmtpClient, Transport};
-use lettre_email::EmailBuilder;
-use lettre_email::{mime::TEXT_PLAIN, Email};
-use std::env;
-use std::path::Path;
+use lettre::{SmtpClient, Transport};
+use lettre_email::Email;
 
 pub struct SendError;
 
@@ -17,7 +14,6 @@ pub fn send_activation_email(
     let smtp_server = "smtp.gmail.com";
     let smtp_username = "haruan2394@gmail.com";
     let smtp_password = "ahsubgwbgtjxjtqh";
-    let smtp_port = 587u16;
 
     let email = Email::builder()
         .to((email, nickname))

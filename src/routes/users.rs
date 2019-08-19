@@ -1,12 +1,10 @@
-use crate::db::{self, users::UserCreationError};
-use crate::email::SendError;
-use crate::errors::{Errors, FieldValidator};
+use crate::db;
+use crate::error::TentechError;
 use crate::models::user::TokenData;
+use crate::validation::FieldValidator;
 use percent_encoding::percent_decode_str;
-use rocket::http::RawStr;
 use rocket_contrib::json::{Json, JsonValue};
 use serde::Deserialize;
-use serde_json;
 use validator::Validate;
 
 #[derive(Deserialize)]
@@ -33,7 +31,7 @@ pub struct LoginUser {
 }
 
 #[post("/users", format = "json", data = "<new_user>")]
-pub fn post_users(new_user: Json<NewUser>, conn: db::Conn) -> Result<JsonValue, Errors> {
+pub fn post_users(new_user: Json<NewUser>, conn: db::Conn) -> Result<JsonValue, TentechError> {
     let new_user = new_user.into_inner().user;
 
     let mut extractor = FieldValidator::validate(&new_user);
@@ -42,54 +40,48 @@ pub fn post_users(new_user: Json<NewUser>, conn: db::Conn) -> Result<JsonValue, 
     let email = extractor.extract("email", new_user.email);
     let password = extractor.extract("password", new_user.password);
 
-    extractor.check()?;
+    extractor
+        .check()
+        .map_err(|e| TentechError::ValidationFailed(e.errors))?;
 
     // In create method, convert a password into a hash value. no worries.
     db::users::create(&conn, &username, &nickname, &email, &password)
+        .map_err(|e| TentechError::DatabaseFailed(format!("{}", e)))
         .and_then(|user| {
             user.prepare_activate()
-                .map_err(|_| UserCreationError::DuplicatedEmail)
+                .map_err(|_| TentechError::CannotSendEmail)
         })
         .map(|user| json!({ "user": user }))
-        .map_err(|error| {
-            let field = match error {
-                UserCreationError::DuplicatedEmail => "email",
-                UserCreationError::DuplicatedUsername => "username",
-            };
-            Errors::new(&[(field, "has already been taken")])
-        })
 }
 
 #[get("/users/activate?<token>")]
-pub fn activate(token: String, conn: db::Conn) -> Result<JsonValue, Errors> {
+pub fn activate(token: String, conn: db::Conn) -> Result<JsonValue, TentechError> {
     let url_decoded_token = percent_decode_str(&token)
         .decode_utf8()
-        .unwrap()
+        .map_err(|_| TentechError::CannotDecryptToken)?
         .to_string();
-    let token_data = TokenData::decode(url_decoded_token)
-        .map_err(|_| Errors::new(&[("activate", "decode error")]))?;
+    let token_data =
+        TokenData::decode(url_decoded_token).map_err(|_| TentechError::CannotDecryptToken)?;
     let target = db::users::find(&conn, &token_data.user.id)
-        .map_err(|_| Errors::new(&[("activate", "not found user")]))?;
+        .map_err(|e| TentechError::DatabaseFailed(format!("{}", e)))?;
     if target.activated {
-        return Err(Errors::new(&[("activate", "has already been activated")]));
+        return Err(TentechError::AlreadyActivated);
     }
     db::users::activate(&conn, &token_data.user)
-        .map_err(|_| Errors::new(&[("activate", "make activate true")]))?;
+        .map_err(|e| TentechError::DatabaseFailed(format!("{}", e)))?;
 
-    if token_data.check_expired() {
-        println!("{}", "OK!");
-    } else {
-        return Err(Errors::new(&[("activate", "expired")]));
+    if !token_data.check_expired() {
+        return Err(TentechError::TokenExpired);
     }
 
     Ok(json!(token_data))
 }
 
 #[post("/users/login", format = "json", data = "<login_user>")]
-pub fn login(login_user: Json<LoginUser>, conn: db::Conn) -> Result<JsonValue, Errors> {
+pub fn login(login_user: Json<LoginUser>, conn: db::Conn) -> Result<JsonValue, TentechError> {
     let login_user = login_user.into_inner();
     let target = db::users::login(&conn, &login_user.email, &login_user.password)
-        .map_err(|_| Errors::new(&[("login", "invalid")]))?;
+        .map_err(|e| TentechError::DatabaseFailed(format!("{}", e)))?;
     let token = target.generate_token();
     Ok(json!({ "token": token }))
 }

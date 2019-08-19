@@ -35,7 +35,7 @@ impl User {
     pub fn prepare_activate(&self) -> Result<User, SendError> {
         let token = self.generate_token();
         let encoded_token = percent_encode(token.as_bytes(), NON_ALPHANUMERIC).to_string();
-        match send_activation_email(&self.email, &self.nickname, &token) {
+        match send_activation_email(&self.email, &self.nickname, &encoded_token) {
             Some(err) => return Err(err),
             None => {}
         }
@@ -77,18 +77,25 @@ fn check_valid(key: &str) -> Result<TokenData, ()> {
         })
 }
 
-impl<'a, 'r> FromRequest<'a, 'r> for TokenData {
-    type Error = ();
+#[derive(Debug)]
+pub enum TokenError {
+    BadCount,
+    Missing,
+    Invalid,
+}
 
-    fn from_request(request: &'a Request<'r>) -> request::Outcome<Self, ()> {
+impl<'a, 'r> FromRequest<'a, 'r> for TokenData {
+    type Error = TokenError;
+
+    fn from_request(request: &'a Request<'r>) -> request::Outcome<Self, Self::Error> {
         let keys: Vec<_> = request.headers().get("x-api-key").collect();
         match keys.len() {
-            0 => Outcome::Failure((Status::BadRequest, ())),
+            0 => Outcome::Failure((Status::BadRequest, Self::Error::Missing)),
             1 => match check_valid(keys[0]) {
                 Ok(token_data) => Outcome::Success(token_data),
-                Err(_) => Outcome::Failure((Status::BadRequest, ())),
+                Err(_) => Outcome::Failure((Status::BadRequest, Self::Error::Invalid)),
             },
-            _ => Outcome::Failure((Status::BadRequest, ())),
+            _ => Outcome::Failure((Status::BadRequest, Self::Error::BadCount)),
         }
     }
 }

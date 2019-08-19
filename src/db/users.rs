@@ -1,10 +1,10 @@
+use crate::error::TentechError;
 use crate::models::user::User;
 use crate::schema::users;
 use crypto::scrypt::{scrypt_check, scrypt_simple, ScryptParams};
 use diesel::pg::PgConnection;
 use diesel::prelude::*;
 use diesel::result::{DatabaseErrorKind, Error};
-use serde::Deserialize;
 use std::time::SystemTime;
 
 #[derive(Insertable)]
@@ -41,7 +41,7 @@ pub fn create(
     nickname: &str,
     email: &str,
     password: &str,
-) -> Result<User, UserCreationError> {
+) -> Result<User, Error> {
     let hash = &scrypt_simple(password, &ScryptParams::new(14, 8, 1)).expect("hash error");
 
     let new_user = &NewUser {
@@ -55,7 +55,6 @@ pub fn create(
     diesel::insert_into(users::table)
         .values(new_user)
         .get_result::<User>(conn)
-        .map_err(Into::into)
 }
 
 pub fn delete_all(conn: &PgConnection) -> Result<usize, Error> {
@@ -75,12 +74,18 @@ pub fn find(conn: &PgConnection, id: &i32) -> Result<User, Error> {
     users::table.find(id).first::<User>(conn)
 }
 
-pub fn login(conn: &PgConnection, email: &String, password: &String) -> Result<User, Error> {
+pub fn login(conn: &PgConnection, email: &String, password: &String) -> Result<User, TentechError> {
     let target = users::table
         .filter(users::email.eq(email))
-        .first::<User>(conn)?;
+        .first::<User>(conn)
+        .map_err(|e| TentechError::DatabaseFailed(format!("{}", e)))?;
     scrypt_check(&password, &target.password)
-        .and_then(|is_same| if (!is_same) { Err("") } else { Ok(()) })
-        .map_err(|_| Error::RollbackTransaction)?;
-    Ok(target)
+        .map_err(|_| TentechError::CannotVerifyPassword)
+        .and_then(|is_same| {
+            if !is_same {
+                Err(TentechError::CannotVerifyPassword)
+            } else {
+                Ok(target)
+            }
+        })
 }
