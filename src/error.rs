@@ -23,6 +23,47 @@ pub enum TentechError {
     CannotSendEmail,
 }
 
+#[derive(Debug, Serialize)]
+pub struct ErrorJson {
+    pub r#type: String,
+    pub message: String,
+}
+
+impl Into<ErrorJson> for TentechError {
+    fn into(self) -> ErrorJson {
+        match self {
+            TentechError::CannotDecryptToken => ErrorJson {
+                r#type: "CannotDecryptToken".to_string(),
+                message: format!("{}", self),
+            },
+            TentechError::CannotVerifyPassword => ErrorJson {
+                r#type: "CannotVerifyPassword".to_string(),
+                message: format!("{}", self),
+            },
+            TentechError::ValidationFailed(ref e) => ErrorJson {
+                r#type: "ValidationFailed".to_string(),
+                message: format!("{}", self),
+            },
+            TentechError::TokenExpired => ErrorJson {
+                r#type: "TokenExpired".to_string(),
+                message: format!("{}", self),
+            },
+            TentechError::DatabaseFailed(ref m) => ErrorJson {
+                r#type: "DatabaseFailed".to_string(),
+                message: format!("{}", self),
+            },
+            TentechError::AlreadyActivated => ErrorJson {
+                r#type: "AlreadyActivated".to_string(),
+                message: format!("{}", self),
+            },
+            TentechError::CannotSendEmail => ErrorJson {
+                r#type: "CannotSendEmail".to_string(),
+                message: format!("{}", self),
+            },
+        }
+    }
+}
+
 impl fmt::Display for TentechError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match *self {
@@ -57,10 +98,11 @@ impl Responder<'static> for TentechError {
             TentechError::AlreadyActivated => Status::Conflict,
             TentechError::CannotSendEmail => Status::UnprocessableEntity,
         };
+        let error: ErrorJson = self.into();
         Response::build()
             .header(ContentType::JSON)
             .status(status)
-            .sized_body(Cursor::new(json!({ "error": self }).to_string()))
+            .sized_body(Cursor::new(json!(error).to_string()))
             .ok()
     }
 }
