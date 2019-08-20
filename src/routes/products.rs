@@ -28,6 +28,7 @@ struct NewProductData {
 pub fn post_products(
     new_product: Json<NewProduct>,
     conn: db::Conn,
+    token: TokenData,
 ) -> Result<JsonValue, TentechError> {
     let new_product = new_product.into_inner().product;
 
@@ -47,6 +48,7 @@ pub fn post_products(
         &img,
         &new_product.duration,
         &new_product.kind,
+        &token.user.id,
     )
     .map_err(|e| TentechError::DatabaseFailed(format!("{}", e)))
     .map(|pd| json!({ "product": pd }))
