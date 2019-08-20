@@ -1,9 +1,14 @@
+use crate::db;
+use crate::error::TentechError;
+use crate::models::user::TokenData;
+use crate::validation::FieldValidator;
+use percent_encoding::percent_decode_str;
 use rocket_contrib::json::{Json, JsonValue};
 use serde::Deserialize;
 use validator::Validate;
 
 #[derive(Deserialize)]
-struct NewProduct {
+pub struct NewProduct {
     product: NewProductData,
 }
 
