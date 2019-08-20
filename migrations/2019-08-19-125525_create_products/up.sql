@@ -1,1 +1,8 @@
--- Your SQL goes here
+CREATE TABLE products (
+  id SERIAL PRIMARY KEY,
+  title VARCHAR NOT NULL,
+  body TEXT NOT NULL,
+  img VARCHAR NOT NULL,
+  kind VARCHAR NOT NULL,
+  duration INTEGER NOT NULL
+)
