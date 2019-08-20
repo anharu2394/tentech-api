@@ -5,5 +5,5 @@ CREATE TABLE products (
   img VARCHAR NOT NULL,
   kind VARCHAR NOT NULL,
   duration INTEGER NOT NULL,
-  user_id INTEGER REFERENCES users
+  user_id INTEGER REFERENCES users NOT NULL
 )

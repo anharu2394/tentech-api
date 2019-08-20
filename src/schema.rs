@@ -6,7 +6,7 @@ table! {
         img -> Varchar,
         kind -> Varchar,
         duration -> Int4,
-        user_id -> Nullable<Int4>,
+        user_id -> Int4,
     }
 }
 
