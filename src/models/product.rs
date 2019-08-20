@@ -9,4 +9,5 @@ pub struct User {
     pub img: String,
     pub kind: String,
     pub duration: i32,
+    pub user_id: i32,
 }

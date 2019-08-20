@@ -6,6 +6,7 @@ table! {
         img -> Varchar,
         kind -> Varchar,
         duration -> Int4,
+        user_id -> Nullable<Int4>,
     }
 }
 
@@ -20,6 +21,8 @@ table! {
         activated_at -> Nullable<Timestamp>,
     }
 }
+
+joinable!(products -> users (user_id));
 
 allow_tables_to_appear_in_same_query!(
     products,
