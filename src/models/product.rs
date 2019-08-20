@@ -1,8 +1,9 @@
+use crate::schema::products;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Queryable, Serialize, Deserialize, Identifiable)]
 #[table_name = "products"]
-pub struct User {
+pub struct Product {
     pub id: i32,
     pub title: String,
     pub body: String,
