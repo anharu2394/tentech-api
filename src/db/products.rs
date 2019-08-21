@@ -43,3 +43,28 @@ pub fn create(
         .values(new_product)
         .get_result::<Product>(conn)
 }
+
+pub fn update(
+    conn: &PgConnection,
+    title: &str,
+    body: &str,
+    img: &str,
+    duration: &i32,
+    kind: &str,
+    user_id: &i32,
+    uuid: &Uuid,
+) -> Result<Product, Error> {
+    let new_product = &NewProduct {
+        title,
+        body,
+        img,
+        duration,
+        kind,
+        user_id,
+        uuid,
+    };
+
+    diesel::update(products::table)
+        .set(new_product)
+        .get_result::<Product>(conn)
+}
