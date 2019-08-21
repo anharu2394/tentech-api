@@ -41,6 +41,7 @@ pub fn rocket() -> rocket::Rocket {
                 routes::users::login,
                 routes::users::get,
                 routes::products::post_products,
+                routes::products::update_products,
             ],
         )
         .attach(db::Conn::fairing())
