@@ -62,6 +62,14 @@ pub fn update_products(
     token: TokenData,
     id: String,
 ) -> Result<JsonValue, TentechError> {
+    let uuid = Uuid::parse_str(&id).unwrap();
+    let product = db::products::find(&conn, &uuid)
+        .map_err(|e| TentechError::DatabaseFailed(format!("{}", e)))?;
+    if !(product.user_id == token.user.id) {
+        return Err(TentechError::Unauthorized(
+            "Cannot delete other's product".to_string(),
+        ));
+    }
     let update_product = update_product.into_inner();
 
     let mut extractor = FieldValidator::validate(&update_product);
@@ -72,7 +80,6 @@ pub fn update_products(
     extractor
         .check()
         .map_err(|e| TentechError::ValidationFailed(e.errors))?;
-    let uuid = Uuid::parse_str(&id).unwrap();
     db::products::update(
         &conn,
         &title,
