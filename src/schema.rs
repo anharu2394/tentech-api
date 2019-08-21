@@ -1,6 +1,7 @@
 table! {
     products (id) {
         id -> Int4,
+        uuid -> Uuid,
         title -> Varchar,
         body -> Text,
         img -> Varchar,

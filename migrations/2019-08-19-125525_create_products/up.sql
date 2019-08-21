@@ -1,5 +1,6 @@
 CREATE TABLE products (
   id SERIAL PRIMARY KEY,
+  uuid UUID NOT NULL,
   title VARCHAR NOT NULL,
   body TEXT NOT NULL,
   img VARCHAR NOT NULL,

@@ -5,6 +5,7 @@ use diesel::pg::PgConnection;
 use diesel::prelude::*;
 use diesel::result::{DatabaseErrorKind, Error};
 use std::time::SystemTime;
+use uuid::Uuid;
 
 #[derive(Insertable)]
 #[table_name = "products"]
@@ -15,6 +16,7 @@ pub struct NewProduct<'a> {
     pub duration: &'a i32,
     pub kind: &'a str,
     pub user_id: &'a i32,
+    pub uuid: &'a Uuid,
 }
 
 pub fn create(
@@ -33,6 +35,7 @@ pub fn create(
         duration,
         kind,
         user_id,
+        uuid: &Uuid::new_v4(),
     };
 
     diesel::insert_into(products::table)
