@@ -1,6 +1,7 @@
 use rocket_contrib::databases::diesel;
 
 pub mod products;
+pub mod tags;
 pub mod users;
 
 #[database("diesel_postgres_pool")]
