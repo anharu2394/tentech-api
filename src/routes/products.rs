@@ -54,3 +54,35 @@ pub fn post_products(
     .map_err(|e| TentechError::DatabaseFailed(format!("{}", e)))
     .map(|pd| json!({ "product": pd }))
 }
+
+#[patch("/products/<id>", format = "json", data = "<update_product>")]
+pub fn update_products(
+    update_product: Json<NewProductData>,
+    conn: db::Conn,
+    token: TokenData,
+    id: String,
+) -> Result<JsonValue, TentechError> {
+    let update_product = update_product.into_inner();
+
+    let mut extractor = FieldValidator::validate(&update_product);
+    let title = extractor.extract("title", update_product.title);
+    let body = extractor.extract("body", update_product.body);
+    let img = extractor.extract("img", update_product.img);
+
+    extractor
+        .check()
+        .map_err(|e| TentechError::ValidationFailed(e.errors))?;
+    let uuid = Uuid::parse_str(&id).unwrap();
+    db::products::update(
+        &conn,
+        &title,
+        &body,
+        &img,
+        &update_product.duration,
+        &update_product.kind,
+        &token.user.id,
+        &uuid,
+    )
+    .map_err(|e| TentechError::DatabaseFailed(format!("{}", e)))
+    .map(|pd| json!({ "product": pd }))
+}
