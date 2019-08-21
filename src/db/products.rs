@@ -68,3 +68,10 @@ pub fn update(
         .set(new_product)
         .get_result::<Product>(conn)
 }
+
+pub fn get_user_id(conn: &PgConnection, id: &Uuid) -> Result<i32, Error> {
+    products::table
+        .filter(products::uuid.eq(id))
+        .select(products::user_id)
+        .first(conn)
+}
