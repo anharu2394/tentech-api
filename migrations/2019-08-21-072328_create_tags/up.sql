@@ -1,0 +1,6 @@
+CREATE TABLE tags (
+  id SERIAL PRIMARY KEY,
+  uuid UUID NOT NULL,
+  name VARCHAR NOT NULL,
+  kind VARCHAR NOT NULL
+)
