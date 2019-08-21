@@ -86,3 +86,17 @@ pub fn update_products(
     .map_err(|e| TentechError::DatabaseFailed(format!("{}", e)))
     .map(|pd| json!({ "product": pd }))
 }
+
+#[delete("/products/<id>")]
+pub fn delete_products(
+    conn: db::Conn,
+    token: TokenData,
+    id: String,
+) -> Result<JsonValue, TentechError> {
+    let uuid = Uuid::parse_str(&id).unwrap();
+    let user_id = db::products::get_user_id(&conn, &uuid)
+        .map_err(|e| TentechError::DatabaseFailed(format!("{}", e)))?;
+    if !user_id == token.user.id {
+        return Err(TentechError::Unauthorized("Cannot delete other's product"));
+    }
+}
