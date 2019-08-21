@@ -101,9 +101,14 @@ pub fn delete_products(
     id: String,
 ) -> Result<JsonValue, TentechError> {
     let uuid = Uuid::parse_str(&id).unwrap();
-    let user_id = db::products::get_user_id(&conn, &uuid)
+    let product = db::products::find(&conn, &uuid)
         .map_err(|e| TentechError::DatabaseFailed(format!("{}", e)))?;
-    if !user_id == token.user.id {
-        return Err(TentechError::Unauthorized("Cannot delete other's product"));
+    if !(product.user_id == token.user.id) {
+        return Err(TentechError::Unauthorized(
+            "Cannot delete other's product".to_string(),
+        ));
     }
+    db::products::delete(&conn, &uuid)
+        .map_err(|e| TentechError::DatabaseFailed(format!("{}", e)))
+        .map(|_| json!({}))
 }
