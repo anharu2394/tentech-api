@@ -5,6 +5,7 @@ use crate::validation::FieldValidator;
 use percent_encoding::percent_decode_str;
 use rocket_contrib::json::{Json, JsonValue};
 use serde::Deserialize;
+use uuid::Uuid;
 use validator::Validate;
 
 #[derive(Deserialize)]
@@ -13,7 +14,7 @@ pub struct NewProduct {
 }
 
 #[derive(Deserialize, Validate)]
-struct NewProductData {
+pub struct NewProductData {
     #[validate(length(min = "1", max = "33"))]
     title: Option<String>,
     #[validate(length(min = "1"))]
