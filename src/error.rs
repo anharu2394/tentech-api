@@ -21,6 +21,8 @@ pub enum TentechError {
     AlreadyActivated,
 
     CannotSendEmail,
+
+    Unauthorized(String),
 }
 
 #[derive(Debug, Serialize)]
@@ -60,6 +62,10 @@ impl Into<ErrorJson> for TentechError {
                 r#type: "CannotSendEmail".to_string(),
                 message: format!("{}", self),
             },
+            TentechError::Unauthorized(ref m) => ErrorJson {
+                r#type: "Unauthorized".to_string(),
+                message: format!("{}", self),
+            },
         }
     }
 }
@@ -74,6 +80,7 @@ impl fmt::Display for TentechError {
             TentechError::DatabaseFailed(ref m) => f.write_str(m),
             TentechError::AlreadyActivated => f.write_str("Already activated"),
             TentechError::CannotSendEmail => f.write_str("Cannot send email"),
+            TentechError::Unauthorized(ref m) => f.write_str(m),
         }
     }
 }
@@ -97,6 +104,7 @@ impl Responder<'static> for TentechError {
             TentechError::DatabaseFailed(_) => Status::Conflict,
             TentechError::AlreadyActivated => Status::Conflict,
             TentechError::CannotSendEmail => Status::UnprocessableEntity,
+            TentechError::Unauthorized(_) => Status::Unauthorized,
         };
         let error: ErrorJson = self.into();
         Response::build()
