@@ -10,7 +10,7 @@ extern crate validator_derive;
 #[macro_use]
 extern crate diesel;
 
-mod db;
+pub mod db;
 mod email;
 mod error;
 mod models;
