@@ -7,7 +7,8 @@ use diesel::result::{DatabaseErrorKind, Error};
 use std::time::SystemTime;
 use uuid::Uuid;
 
-#[derive(Insertable)]
+#[derive(Insertable, AsChangeset)]
+#[primary_key(uuid)]
 #[table_name = "products"]
 pub struct NewProduct<'a> {
     pub title: &'a str,
