@@ -69,9 +69,12 @@ pub fn update(
         .get_result::<Product>(conn)
 }
 
-pub fn get_user_id(conn: &PgConnection, id: &Uuid) -> Result<i32, Error> {
+pub fn find(conn: &PgConnection, id: &Uuid) -> Result<Product, Error> {
     products::table
         .filter(products::uuid.eq(id))
-        .select(products::user_id)
-        .first(conn)
+        .first::<Product>(conn)
+}
+
+pub fn delete(conn: &PgConnection, id: &Uuid) -> Result<usize, Error> {
+    diesel::delete(products::table.filter(products::uuid.eq(id))).execute(conn)
 }
