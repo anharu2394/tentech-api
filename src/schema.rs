@@ -44,9 +44,4 @@ joinable!(products -> users (user_id));
 joinable!(products_tags -> products (product_id));
 joinable!(products_tags -> tags (tag_id));
 
-allow_tables_to_appear_in_same_query!(
-    products,
-    products_tags,
-    tags,
-    users,
-);
+allow_tables_to_appear_in_same_query!(products, products_tags, tags, users,);
