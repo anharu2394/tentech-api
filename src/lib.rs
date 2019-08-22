@@ -10,7 +10,7 @@ extern crate validator_derive;
 #[macro_use]
 extern crate diesel;
 
-mod db;
+pub mod db;
 mod email;
 mod error;
 mod models;
@@ -31,6 +31,12 @@ pub fn test_establish_connection() -> PgConnection {
     PgConnection::establish(&database_url).expect(&format!("Error connecting to {}", database_url))
 }
 
+pub fn establish_connection() -> PgConnection {
+    dotenv().ok();
+
+    let database_url = env::var("DATABASE_URL").expect("DATABASE_URL must be set");
+    PgConnection::establish(&database_url).expect(&format!("Error connecting to {}", database_url))
+}
 pub fn rocket() -> rocket::Rocket {
     rocket::ignite()
         .mount(
@@ -40,6 +46,9 @@ pub fn rocket() -> rocket::Rocket {
                 routes::users::activate,
                 routes::users::login,
                 routes::users::get,
+                routes::products::post_products,
+                routes::products::update_products,
+                routes::products::delete_products,
             ],
         )
         .attach(db::Conn::fairing())

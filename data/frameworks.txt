@@ -1,0 +1,56 @@
+Active Server Pages
+Angular
+Apache Struts
+Apache Tapestry
+Apache Wicket
+ASP.NET
+ASP.NET MVC Framework
+CakePHP
+CodeIgniter
+Django
+Express.js
+Framework-spider
+FuelPHP
+Google Web Toolkit
+Gurupa
+JavaServer Faces
+Laravel
+Lift
+MEAN
+Obidos
+OpenGion
+Play Framework
+PRADO
+Silex
+Symfony
+Turbine
+Web2py
+WebWork
+Yii
+Zend Framework
+ZK
+Sinatra
+Padrino
+Ruby on Rails
+Bottle
+Flask
+Phoenix
+Webmachine
+Rocket
+Iron
+ACTIX
+Yesod
+Tonatona
+Servant
+Snap
+Meteor
+Vue
+React
+Spring
+Tornado
+Tensorflow
+Pytorch
+Keras
+Ocamlnet
+Eliom
+Ocsigen
