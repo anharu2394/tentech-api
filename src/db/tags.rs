@@ -1,6 +1,7 @@
 use crate::error::TentechError;
 use crate::models::tag::ProductTag;
 use crate::models::tag::Tag;
+use crate::schema::products_tags;
 use crate::schema::tags;
 use diesel::pg::PgConnection;
 use diesel::prelude::*;
@@ -18,6 +19,13 @@ pub struct NewTag {
     pub name: String,
     pub kind: String,
     pub uuid: Uuid,
+}
+
+#[derive(Insertable, Debug)]
+#[table_name = "products_tags"]
+pub struct NewProductTag {
+    pub product_id: i32,
+    pub tag_id: i32,
 }
 
 pub fn init(conn: &PgConnection) -> Result<usize, Error> {
