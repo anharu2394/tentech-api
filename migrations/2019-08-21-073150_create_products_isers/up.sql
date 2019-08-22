@@ -1,6 +1,6 @@
 -- Your SQL goes here
 CREATE TABLE products_tags (
   id SERIAL PRIMARY KEY,
-  product_id INTEGER REFERENCES products NOT NULL,
-  tag_id INTEGER REFERENCES tags NOT NULL
+  product_id INTEGER REFERENCES products (id) ON DELETE CASCADE NOT NULL,
+  tag_id INTEGER REFERENCES tags (id) ON DELETE CASCADE NOT NULL
 )
