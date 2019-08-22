@@ -24,6 +24,7 @@ pub struct NewProductData {
     img: Option<String>,
     duration: i32,
     kind: String,
+    tags: Vec<i32>,
 }
 
 #[post("/products", format = "json", data = "<new_product>")]
