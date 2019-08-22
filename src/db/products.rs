@@ -28,6 +28,7 @@ pub fn create(
     img: &str,
     duration: &i32,
     kind: &str,
+    tags: &Vec<i32>,
     user_id: &i32,
 ) -> Result<Product, Error> {
     let new_product = &NewProduct {
@@ -40,9 +41,11 @@ pub fn create(
         uuid: &Uuid::new_v4(),
     };
 
-    diesel::insert_into(products::table)
+    let product = diesel::insert_into(products::table)
         .values(new_product)
-        .get_result::<Product>(conn)
+        .get_result::<Product>(conn)?;
+    db::tags::entry_to_product(conn, product.id, tags.to_vec());
+    Ok(product)
 }
 
 pub fn update(
