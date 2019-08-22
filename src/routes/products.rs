@@ -90,6 +90,7 @@ pub fn update_products(
         &img,
         &update_product.duration,
         &update_product.kind,
+        &update_product.tags,
         &token.user.id,
         &uuid,
     )
