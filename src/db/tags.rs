@@ -56,7 +56,30 @@ pub fn init(conn: &PgConnection) -> Result<usize, Error> {
     if new_names == exist_names {
         return Ok(0);
     }
+    diesel::delete(tags::table).execute(conn)?;
     diesel::insert_into(tags::table)
         .values(new_tags)
+        .execute(conn)
+}
+
+pub fn entry_to_product(
+    conn: &PgConnection,
+    product_id: i32,
+    tags: Vec<i32>,
+) -> Result<usize, Error> {
+    let new_product_tags: Vec<_> = tags
+        .iter()
+        .map(|i| NewProductTag {
+            product_id,
+            tag_id: *i,
+        })
+        .collect();
+    diesel::insert_into(products_tags::table)
+        .values(new_product_tags)
+        .execute(conn)
+}
+
+pub fn delete_by_product_id(conn: &PgConnection, product_id: i32) -> Result<usize, Error> {
+    diesel::delete(products_tags::table.filter(products_tags::product_id.eq(product_id)))
         .execute(conn)
 }
