@@ -51,6 +51,7 @@ pub fn post_products(
         &img,
         &new_product.duration,
         &new_product.kind,
+        &new_product.tags,
         &token.user.id,
     )
     .map_err(|e| TentechError::DatabaseFailed(format!("{}", e)))
