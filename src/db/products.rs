@@ -55,6 +55,7 @@ pub fn update(
     img: &str,
     duration: &i32,
     kind: &str,
+    tags: &Vec<i32>,
     user_id: &i32,
     uuid: &Uuid,
 ) -> Result<Product, Error> {
@@ -68,9 +69,12 @@ pub fn update(
         uuid,
     };
 
-    diesel::update(products::table)
+    let product = diesel::update(products::table)
         .set(new_product)
-        .get_result::<Product>(conn)
+        .get_result::<Product>(conn)?;
+    db::tags::delete_by_product_id(conn, product.id)?;
+    db::tags::entry_to_product(conn, product.id, tags.to_vec())?;
+    Ok(product)
 }
 
 pub fn find(conn: &PgConnection, id: &Uuid) -> Result<Product, Error> {
