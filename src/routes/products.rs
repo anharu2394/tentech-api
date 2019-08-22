@@ -5,6 +5,7 @@ use crate::validation::FieldValidator;
 use percent_encoding::percent_decode_str;
 use rocket_contrib::json::{Json, JsonValue};
 use serde::Deserialize;
+use std::vec::Vec;
 use uuid::Uuid;
 use validator::Validate;
 
