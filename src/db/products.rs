@@ -1,3 +1,4 @@
+use crate::db;
 use crate::error::TentechError;
 use crate::models::product::Product;
 use crate::schema::products;
