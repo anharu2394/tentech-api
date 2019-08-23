@@ -83,7 +83,7 @@ pub fn login(login_user: Json<LoginUser>, conn: db::Conn) -> Result<JsonValue, T
     let target = db::users::login(&conn, &login_user.email, &login_user.password)
         .map_err(|e| TentechError::DatabaseFailed(format!("{}", e)))?;
     let token = target.generate_token();
-    Ok(json!({ "token": token }))
+    Ok(json!({ "token": token, "user": target }))
 }
 
 #[get("/users/<id>")]
