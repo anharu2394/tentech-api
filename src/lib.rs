@@ -22,7 +22,13 @@ mod validation;
 use diesel::pg::PgConnection;
 use diesel::prelude::*;
 use dotenv::dotenv;
+use rocket::fairing::{Fairing, Info, Kind};
+use rocket::http::{ContentType, Header, Method, Status};
+use rocket::{get, routes};
+use rocket::{Request, Response};
+use rocket_cors::{AllowedHeaders, AllowedOrigins, Error, Guard, Responder};
 use std::env;
+use std::io::Cursor;
 
 pub fn test_establish_connection() -> PgConnection {
     dotenv().ok();
@@ -38,6 +44,15 @@ pub fn establish_connection() -> PgConnection {
     PgConnection::establish(&database_url).expect(&format!("Error connecting to {}", database_url))
 }
 pub fn rocket() -> rocket::Rocket {
+    let allowed_origins = AllowedOrigins::some_exact(&["http://localhost:3000"]);
+
+    let cors = rocket_cors::CorsOptions {
+        allowed_origins,
+        allow_credentials: true,
+        ..Default::default()
+    }
+    .to_cors()
+    .unwrap();
     rocket::ignite()
         .mount(
             "/",
@@ -51,5 +66,6 @@ pub fn rocket() -> rocket::Rocket {
                 routes::products::delete_products,
             ],
         )
+        .attach(cors)
         .attach(db::Conn::fairing())
 }
