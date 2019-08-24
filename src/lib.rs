@@ -66,6 +66,7 @@ pub fn rocket() -> rocket::Rocket {
                 routes::products::update_products,
                 routes::products::delete_products,
                 routes::products::get,
+                routes::products::get_by_user_id,
             ],
         )
         .attach(cors)
