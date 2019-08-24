@@ -74,6 +74,12 @@ pub fn find(conn: &PgConnection, id: &i32) -> Result<User, Error> {
     users::table.find(id).first::<User>(conn)
 }
 
+pub fn find_by_username(conn: &PgConnection, name: &String) -> Result<User, Error> {
+    users::table
+        .filter(users::username.eq(name))
+        .first::<User>(conn)
+}
+
 pub fn login(conn: &PgConnection, email: &String, password: &String) -> Result<User, TentechError> {
     let target = users::table
         .filter(users::email.eq(email))
