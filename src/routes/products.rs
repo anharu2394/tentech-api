@@ -117,3 +117,14 @@ pub fn delete_products(
         .map_err(|e| TentechError::DatabaseFailed(format!("{}", e)))
         .map(|_| json!({}))
 }
+
+#[get("/products/<id>")]
+pub fn get(conn: db::Conn, id: String) -> Result<JsonValue, TentechError> {
+    let uuid = Uuid::parse_str(&id).unwrap();
+    db::products::find(&conn, &uuid)
+        .and_then(|p| {
+            let user = db::users::find(&conn, &p.user_id)?;
+            Ok(json!({ "product": p, "user": user}))
+        })
+        .map_err(|e| TentechError::DatabaseFailed(format!("{}", e)))
+}
