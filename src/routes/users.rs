@@ -86,9 +86,16 @@ pub fn login(login_user: Json<LoginUser>, conn: db::Conn) -> Result<JsonValue, T
     Ok(json!({ "token": token, "user": target }))
 }
 
-#[get("/users/<id>")]
-pub fn get(id: i32, token: TokenData) -> String {
-    "Ok".to_string()
+#[get("/users/validate")]
+pub fn validate(token: TokenData) -> JsonValue {
+    json!({"user": token.user})
+}
+
+#[get("/users/<username>")]
+pub fn get(username: String, conn: db::Conn) -> Result<JsonValue, TentechError> {
+    db::users::find_by_username(&conn, &username)
+        .map_err(|e| TentechError::DatabaseFailed(format!("{}", e)))
+        .map(|u| json!({ "user": u }))
 }
 #[cfg(test)]
 mod test {
