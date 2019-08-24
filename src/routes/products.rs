@@ -128,3 +128,10 @@ pub fn get(conn: db::Conn, id: String) -> Result<JsonValue, TentechError> {
         })
         .map_err(|e| TentechError::DatabaseFailed(format!("{}", e)))
 }
+
+#[get("/users/<user_id>/products")]
+pub fn get_by_user_id(conn: db::Conn, user_id: i32) -> Result<JsonValue, TentechError> {
+    db::products::find_by_user_id(&conn, &user_id)
+        .and_then(|p| Ok(json!({ "products": p })))
+        .map_err(|e| TentechError::DatabaseFailed(format!("{}", e)))
+}
