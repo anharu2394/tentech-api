@@ -83,6 +83,12 @@ pub fn find(conn: &PgConnection, id: &Uuid) -> Result<Product, Error> {
         .first::<Product>(conn)
 }
 
+pub fn find_by_user_id(conn: &PgConnection, id: &i32) -> Result<Vec<Product>, Error> {
+    products::table
+        .filter(products::user_id.eq(id))
+        .load::<Product>(conn)
+}
+
 pub fn delete(conn: &PgConnection, id: &Uuid) -> Result<usize, Error> {
     diesel::delete(products::table.filter(products::uuid.eq(id))).execute(conn)
 }
