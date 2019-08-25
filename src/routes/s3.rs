@@ -33,7 +33,10 @@ pub fn upload(
     request.key = new_asset.key.to_string();
     let body =
         base64::decode(&new_asset.attachment).map_err(|_| TentechError::CannotDecodeBase64)?;
-    println!("{}", body.len())
+    println!("{}", body.len());
+    if body.len() > 2097152 {
+        return Err(TentechError::TooLargeObject);
+    }
     request.body = Some(ByteStream::from(body));
     client
         .put_object(request)
