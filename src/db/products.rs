@@ -17,6 +17,7 @@ pub struct NewProduct<'a> {
     pub img: &'a str,
     pub duration: &'a i32,
     pub kind: &'a str,
+    pub status: &'a str,
     pub user_id: &'a i32,
     pub uuid: &'a Uuid,
 }
@@ -28,6 +29,7 @@ pub fn create(
     img: &str,
     duration: &i32,
     kind: &str,
+    status: &str,
     tags: &Vec<i32>,
     user_id: &i32,
 ) -> Result<Product, Error> {
@@ -37,6 +39,7 @@ pub fn create(
         img,
         duration,
         kind,
+        status,
         user_id,
         uuid: &Uuid::new_v4(),
     };
@@ -55,6 +58,7 @@ pub fn update(
     img: &str,
     duration: &i32,
     kind: &str,
+    status: &str,
     tags: &Vec<i32>,
     user_id: &i32,
     uuid: &Uuid,
@@ -65,6 +69,7 @@ pub fn update(
         img,
         duration,
         kind,
+        status,
         user_id,
         uuid,
     };

@@ -14,6 +14,7 @@ pub struct Product {
     pub body: String,
     pub img: String,
     pub kind: String,
+    pub status: String,
     pub duration: i32,
     pub user_id: i32,
 }

@@ -6,6 +6,7 @@ table! {
         body -> Text,
         img -> Varchar,
         kind -> Varchar,
+        status -> Varchar,
         duration -> Int4,
         user_id -> Int4,
     }

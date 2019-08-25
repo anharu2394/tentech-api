@@ -25,6 +25,7 @@ pub struct NewProductData {
     img: Option<String>,
     duration: i32,
     kind: String,
+    status: String,
     tags: Vec<i32>,
 }
 
@@ -52,6 +53,7 @@ pub fn post_products(
         &img,
         &new_product.duration,
         &new_product.kind,
+        &new_product.status,
         &new_product.tags,
         &token.user.id,
     )
@@ -91,6 +93,7 @@ pub fn update_products(
         &img,
         &update_product.duration,
         &update_product.kind,
+        &update_product.status,
         &update_product.tags,
         &token.user.id,
         &uuid,
