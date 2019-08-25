@@ -72,4 +72,5 @@ pub fn rocket() -> rocket::Rocket {
         )
         .attach(cors)
         .attach(db::Conn::fairing())
+        .manage(s3::initial_s3_client())
 }
