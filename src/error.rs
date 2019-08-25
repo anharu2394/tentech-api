@@ -27,6 +27,7 @@ pub enum TentechError {
     CannotDecodeBase64,
 
     CannotPutS3Object,
+    TooLargeObject,
 }
 
 #[derive(Debug, Serialize)]
@@ -78,6 +79,10 @@ impl Into<ErrorJson> for TentechError {
                 r#type: "CannotPutS3Object".to_string(),
                 message: format!("{}", self),
             },
+            TentechError::TooLargeObject => ErrorJson {
+                r#type: "TooLargeObject".to_string(),
+                message: format!("{}", self),
+            },
         }
     }
 }
@@ -95,6 +100,7 @@ impl fmt::Display for TentechError {
             TentechError::Unauthorized(ref m) => f.write_str(m),
             TentechError::CannotDecodeBase64 => f.write_str("Cannot decode base64"),
             TentechError::CannotPutS3Object => f.write_str("Cannot put object to s3"),
+            TentechError::TooLargeObject => f.write_str("object is too large"),
         }
     }
 }
@@ -121,6 +127,7 @@ impl Responder<'static> for TentechError {
             TentechError::Unauthorized(_) => Status::Unauthorized,
             TentechError::CannotDecodeBase64 => Status::BadRequest,
             TentechError::CannotPutS3Object => Status::UnprocessableEntity,
+            TentechError::TooLargeObject => Status::BadRequest,
         };
         let error: ErrorJson = self.into();
         Response::build()
