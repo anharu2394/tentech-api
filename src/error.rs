@@ -23,6 +23,10 @@ pub enum TentechError {
     CannotSendEmail,
 
     Unauthorized(String),
+
+    CannotDecodeBase64,
+
+    CannotPutS3Object,
 }
 
 #[derive(Debug, Serialize)]
@@ -66,6 +70,14 @@ impl Into<ErrorJson> for TentechError {
                 r#type: "Unauthorized".to_string(),
                 message: format!("{}", self),
             },
+            TentechError::CannotDecodeBase64 => ErrorJson {
+                r#type: "CannotDecodeBase64".to_string(),
+                message: format!("{}", self),
+            },
+            TentechError::CannotPutS3Object => ErrorJson {
+                r#type: "CannotPutS3Object".to_string(),
+                message: format!("{}", self),
+            },
         }
     }
 }
@@ -81,6 +93,8 @@ impl fmt::Display for TentechError {
             TentechError::AlreadyActivated => f.write_str("Already activated"),
             TentechError::CannotSendEmail => f.write_str("Cannot send email"),
             TentechError::Unauthorized(ref m) => f.write_str(m),
+            TentechError::CannotDecodeBase64 => f.write_str("Cannot decode base64"),
+            TentechError::CannotPutS3Object => f.write_str("Cannot put object to s3"),
         }
     }
 }
@@ -105,6 +119,8 @@ impl Responder<'static> for TentechError {
             TentechError::AlreadyActivated => Status::Conflict,
             TentechError::CannotSendEmail => Status::UnprocessableEntity,
             TentechError::Unauthorized(_) => Status::Unauthorized,
+            TentechError::CannotDecodeBase64 => Status::BadRequest,
+            TentechError::CannotPutS3Object => Status::UnprocessableEntity,
         };
         let error: ErrorJson = self.into();
         Response::build()
