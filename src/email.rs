@@ -19,7 +19,10 @@ pub fn send_activation_email(
         .to((email, nickname))
         .from(smtp_username)
         .subject("Hi, access to this link to activate your account.")
-        .text(format!("{}{}", "https://tentech.me/validate?token=", token))
+        .text(format!(
+            "{}{}",
+            "https://tentech.netlify.com/validate/", token
+        ))
         .build()
         .unwrap();
 
