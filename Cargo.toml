@@ -1,0 +1,39 @@
+[package]
+name = "tentech-api"
+version = "0.1.0"
+authors = ["Anharu <haruan2394@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+rocket = "0.4.2"
+rocket_codegen = "0.4.2"
+diesel = { version = "1.0.0", features = ["postgres", "uuid"] }
+dotenv = "0.9.0"
+r2d2 = "0.8.2"
+r2d2-diesel = "1.0.0"
+serde_json = "1.0.28"
+serde = {version = "1.0", features = ["derive"]}
+serde_derive = "1.0.79"
+fernet = "0.1.0"
+bcrypt = "0.2.0"
+validator = "0.8.0"
+validator_derive = "0.8.0"
+rust-crypto = "0.2.36"
+lettre = "0.9.2"
+lettre_email = "0.9"
+chrono = { version = "0.4", features = ["serde"] }
+percent-encoding = "2.1.0"
+uuid = { version = "0.6", features = ["serde", "v4"] }
+rocket_cors = "0.5.0-beta-2"
+rusoto_core = "0.40.0"
+rusoto_s3 = "0.40.0"
+futures = "0.1.28"
+base64 = "0.10.1"
+regex = "1"
+lazy_static = "1.4.0"
+
+[dependencies.rocket_contrib]
+version = "0.4.2"
+default-features = false
+features = ["json",  "diesel_postgres_pool"]
+
