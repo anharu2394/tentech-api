@@ -9,6 +9,7 @@ table! {
         status -> Varchar,
         duration -> Int4,
         user_id -> Int4,
+        simple -> Varchar,
     }
 }
 
@@ -17,6 +18,16 @@ table! {
         id -> Int4,
         product_id -> Int4,
         tag_id -> Int4,
+    }
+}
+
+table! {
+    reactions (id) {
+        id -> Int4,
+        product_id -> Int4,
+        user_id -> Int4,
+        kind -> Varchar,
+        created_at -> Timestamp,
     }
 }
 
@@ -38,16 +49,21 @@ table! {
         password -> Varchar,
         activated -> Bool,
         activated_at -> Nullable<Timestamp>,
+        avatar -> Nullable<Varchar>,
+        bio -> Nullable<Varchar>,
     }
 }
 
 joinable!(products -> users (user_id));
 joinable!(products_tags -> products (product_id));
 joinable!(products_tags -> tags (tag_id));
+joinable!(reactions -> products (product_id));
+joinable!(reactions -> users (user_id));
 
 allow_tables_to_appear_in_same_query!(
     products,
     products_tags,
+    reactions,
     tags,
     users,
 );

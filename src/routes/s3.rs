@@ -16,6 +16,7 @@ pub struct NewAsset {
 pub struct NewAssetData {
     key: String,
     attachment: String,
+    content_type: String,
 }
 
 #[derive(Serialize)]
@@ -31,10 +32,12 @@ pub fn upload(
     let mut request = PutObjectRequest::default();
     request.bucket = String::from("tentech");
     request.key = new_asset.key.to_string();
+    request.acl = Some(String::from("public-read"));
+    request.content_type = Some(new_asset.content_type.to_string());
     let body =
         base64::decode(&new_asset.attachment).map_err(|_| TentechError::CannotDecodeBase64)?;
     println!("{}", body.len());
-    if body.len() > 2097152 {
+    if body.len() > 5242880 {
         return Err(TentechError::TooLargeObject);
     }
     request.body = Some(ByteStream::from(body));

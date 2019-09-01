@@ -22,6 +22,8 @@ pub struct User {
     pub password: String,
     pub activated: bool,
     pub activated_at: Option<SystemTime>,
+    pub avatar: Option<String>,
+    pub bio: Option<String>,
 }
 
 #[derive(Clone, Queryable, Serialize, Deserialize)]

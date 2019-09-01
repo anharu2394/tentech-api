@@ -1,0 +1,3 @@
+-- Your SQL goes here
+ALTER TABLE users ADD COLUMN avatar VARCHAR;
+ALTER TABLE users ADD COLUMN bio VARCHAR;

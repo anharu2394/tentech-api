@@ -1,8 +1,11 @@
 use crate::db;
 use crate::error::TentechError;
 use crate::models::user::TokenData;
+use crate::schema::users;
 use crate::validation::FieldValidator;
+use lazy_static::lazy_static;
 use percent_encoding::percent_decode_str;
+use regex::Regex;
 use rocket_contrib::json::{Json, JsonValue};
 use serde::Deserialize;
 use validator::Validate;
@@ -11,19 +14,41 @@ use validator::Validate;
 pub struct NewUser {
     user: NewUserData,
 }
+lazy_static! {
+    static ref USERNAME_REGEX: Regex = Regex::new(r"\A[a-z0-9_]{1,15}\z").unwrap();
+}
 
 #[derive(Deserialize, Validate)]
 struct NewUserData {
-    #[validate(length(min = "1"))]
+    #[validate(regex = "USERNAME_REGEX", length(min = 1, max = 15))]
     username: Option<String>,
-    #[validate(length(min = "1"))]
+    #[validate(length(min = 1, max = 50))]
     nickname: Option<String>,
     #[validate(email)]
     email: Option<String>,
-    #[validate(length(min = "8"))]
+    #[validate(length(min = 8))]
     password: Option<String>,
 }
 
+#[derive(Deserialize)]
+pub struct UpdateUser {
+    user: UpdateUserData,
+}
+#[derive(Deserialize, Validate, AsChangeset)]
+#[table_name = "users"]
+pub struct UpdateUserData {
+    #[validate(regex = "USERNAME_REGEX", length(min = 1, max = 15))]
+    username: String,
+    #[validate(length(min = 1, max = 50))]
+    nickname: String,
+    #[validate(email)]
+    email: String,
+    #[validate(length(min = "8"))]
+    password: String,
+    #[validate(url)]
+    avatar: Option<String>,
+    bio: String,
+}
 #[derive(Deserialize)]
 pub struct LoginUser {
     email: String,
@@ -54,6 +79,21 @@ pub fn post_users(new_user: Json<NewUser>, conn: db::Conn) -> Result<JsonValue, 
         .map(|user| json!({ "user": user }))
 }
 
+#[post("/users/<id>", format = "json", data = "<update_user>")]
+pub fn update_users(
+    update_user: Json<UpdateUser>,
+    conn: db::Conn,
+    id: i32,
+) -> Result<JsonValue, TentechError> {
+    let update_user = update_user.into_inner().user;
+    update_user
+        .validate()
+        .map_err(|e| TentechError::ValidationFailed(e))?;
+
+    db::users::update(&conn, &id, &update_user)
+        .map_err(|e| TentechError::DatabaseFailed(format!("{}", e)))
+        .map(|user| json!({ "user": user }))
+}
 #[get("/users/activate?<token>")]
 pub fn activate(token: String, conn: db::Conn) -> Result<JsonValue, TentechError> {
     let url_decoded_token = percent_decode_str(&token)
@@ -86,9 +126,20 @@ pub fn login(login_user: Json<LoginUser>, conn: db::Conn) -> Result<JsonValue, T
     Ok(json!({ "token": token, "user": target }))
 }
 
+#[post("/users/resend")]
+pub fn resend(token: TokenData, conn: db::Conn) -> Result<JsonValue, TentechError> {
+    token
+        .user
+        .prepare_activate()
+        .map_err(|_| TentechError::CannotSendEmail)?;
+    Ok(json!({}))
+}
+
 #[get("/users/validate")]
-pub fn validate(token: TokenData) -> JsonValue {
-    json!({"user": token.user})
+pub fn validate(token: TokenData, conn: db::Conn) -> Result<JsonValue, TentechError> {
+    db::users::find(&conn, &token.user.id)
+        .map_err(|e| TentechError::DatabaseFailed(format!("{}", e)))
+        .map(|u| json!({ "user": u }))
 }
 
 #[get("/users/<username>")]

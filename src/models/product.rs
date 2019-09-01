@@ -4,7 +4,9 @@ use diesel::associations;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
-#[derive(Clone, Queryable, Serialize, Deserialize, Identifiable, Associations)]
+#[derive(
+    Debug, Clone, Queryable, Serialize, Deserialize, Identifiable, Associations, QueryableByName,
+)]
 #[belongs_to(parent = "User")]
 #[table_name = "products"]
 pub struct Product {
@@ -17,4 +19,5 @@ pub struct Product {
     pub status: String,
     pub duration: i32,
     pub user_id: i32,
+    pub simple: String,
 }

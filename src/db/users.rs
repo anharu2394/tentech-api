@@ -1,5 +1,6 @@
 use crate::error::TentechError;
 use crate::models::user::User;
+use crate::routes::users::UpdateUserData;
 use crate::schema::users;
 use crypto::scrypt::{scrypt_check, scrypt_simple, ScryptParams};
 use diesel::pg::PgConnection;
@@ -57,6 +58,11 @@ pub fn create(
         .get_result::<User>(conn)
 }
 
+pub fn update(conn: &PgConnection, id: &i32, target: &UpdateUserData) -> Result<User, Error> {
+    diesel::update(users::table.find(id))
+        .set(target)
+        .get_result::<User>(conn)
+}
 pub fn delete_all(conn: &PgConnection) -> Result<usize, Error> {
     diesel::delete(users::table).execute(conn)
 }

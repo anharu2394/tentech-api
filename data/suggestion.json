@@ -1,0 +1,184 @@
+{
+  "beginner":{
+    "WebApp": {
+      "Python": {
+        "fw": "Django",
+        "app": "投票アプリ",
+        "learning_url": [
+          "https://prog-8.com/languages/python",
+					"https://www.javadrive.jp/python/",
+					"https://paiza.jp/works/python3/primer"
+        ],
+        "working_url": [
+					"https://docs.djangoproject.com/ja/2.2/intro/tutorial01/",
+					"https://qiita.com/kaki_k/items/511611cadac1d0c69c54",
+					"https://qiita.com/gragragrao/items/373057783ba8856124f3"
+        ]
+      },
+      "Ruby": {
+        "fw": "Rails",
+        "app": "helloアプリ",
+        "learning_url": [
+					"https://www.ruby-lang.org/ja/documentation/quickstart/",
+					"https://www.javadrive.jp/ruby/",
+					"https://prog-8.com/languages/ruby"
+        ],
+        "working_url": [
+					"https://railstutorial.jp/chapters/beginning?version=5.1#cha-beginning",
+					"https://railsguides.jp",
+					"https://prog-8.com/lessons/rails5/study/1"
+        ]
+      },
+      "Java": {
+        "fw": "PlayFramework",
+        "app": "検索アプリ",
+        "learning_url": [
+          "https://www.javadrive.jp/start/",
+					"https://dotinstall.com/lessons/basic_java_v2",
+					"https://prog-8.com/languages/java"
+        ],
+        "working_url": [
+					"https://qiita.com/rubytomato@github/items/17aed34b6294b4f205ea",
+          "https://www.playframework.com/documentation/ja/2.4.x/Home"
+        ]
+      },
+      "PHP": {
+        "fw": "Laravel",
+        "app": "リンクを入力するアプリ",
+        "learning_url": [
+          "https://dotinstall.com/lessons/basic_php_v2",
+					"https://prog-8.com/languages/php",
+          "https://www.javadrive.jp/php/"
+        ],
+        "working_url": [
+          "https://qiita.com/Fendo181/items/55701abc11c205b9c057",
+					"https://qiita.com/Fendo181/items/dece727ea402552fee19"
+        ]
+      },
+      "JavaScript": {
+        "fw": "Vue",
+        "app": "カウンターアプリ",
+        "learning_url": [
+          "https://developer.mozilla.org/ja/docs/Web/JavaScript/A_re-introduction_to_JavaScript",
+					"https://prog-8.com/languages/es6",
+          "https://qiita.com/soarflat/items/b251caf9cb59b72beb9b",
+          "https://qiita.com/abcang/items/824681cb88676da4f9a8"
+        ],
+        "working_url": [
+          "https://jp.vuejs.org/v2/guide/index.html",
+          "https://gihyo.jp/dev/serial/01/vuejs",
+          "https://qiita.com/ferretdayo/items/edcd2b6682148e477104"
+        ]
+      }
+    },
+    "MobileApp": {
+			"JavaScript": {
+				"fw": "React Native",
+				"app": "文字を表示するアプリ",
+				"working_url": [
+					"https://qiita.com/YutamaKotaro/items/dd7846c6db15e2307daa",
+					"https://facebook.github.io/react-native/docs/getting-started.html#content"
+				]	
+			},
+			"Java": {
+				"fw": "Java",
+				"working_url": [
+					"https://qiita.com/YutamaKotaro/items/dd7846c6db15e2307daa",
+					"https://facebook.github.io/react-native/docs/getting-started.html#content"
+				]	
+			}
+		}
+  },
+  "intermediate": {
+    "WebApp": {
+      "Python": {
+        "fw": "Django",
+        "app": "投票アプリ",
+        "learning_url": [
+          "https://prog-8.com/languages/python",
+					"https://www.javadrive.jp/python/",
+					"https://paiza.jp/works/python3/primer"
+        ],
+        "working_url": [
+					"https://docs.djangoproject.com/ja/2.2/intro/tutorial01/",
+					"https://qiita.com/kaki_k/items/511611cadac1d0c69c54",
+					"https://qiita.com/gragragrao/items/373057783ba8856124f3"
+        ]
+      },
+      "Ruby": {
+        "fw": "Rails",
+        "app": "helloアプリ",
+        "learning_url": [
+					"https://www.ruby-lang.org/ja/documentation/quickstart/",
+					"https://www.javadrive.jp/ruby/",
+					"https://prog-8.com/languages/ruby"
+        ],
+        "working_url": [
+					"https://railstutorial.jp/chapters/beginning?version=5.1#cha-beginning",
+					"https://railsguides.jp",
+					"https://prog-8.com/lessons/rails5/study/1"
+        ]
+      },
+      "Java": {
+        "fw": "PlayFramework",
+        "app": "検索アプリ",
+        "learning_url": [
+          "https://www.javadrive.jp/start/",
+					"https://dotinstall.com/lessons/basic_java_v2",
+					"https://prog-8.com/languages/java"
+        ],
+        "working_url": [
+					"https://qiita.com/rubytomato@github/items/17aed34b6294b4f205ea",
+          "https://www.playframework.com/documentation/ja/2.4.x/Home"
+        ]
+      },
+      "PHP": {
+        "fw": "Laravel",
+        "app": "リンクを入力するアプリ",
+        "learning_url": [
+          "https://dotinstall.com/lessons/basic_php_v2",
+					"https://prog-8.com/languages/php",
+          "https://www.javadrive.jp/php/"
+        ],
+        "working_url": [
+          "https://qiita.com/Fendo181/items/55701abc11c205b9c057",
+					"https://qiita.com/Fendo181/items/dece727ea402552fee19"
+        ]
+      },
+      "JavaScript": {
+        "fw": "Vue",
+        "app": "カウンターアプリ",
+        "learning_url": [
+          "https://developer.mozilla.org/ja/docs/Web/JavaScript/A_re-introduction_to_JavaScript",
+					"https://prog-8.com/languages/es6",
+          "https://qiita.com/soarflat/items/b251caf9cb59b72beb9b",
+          "https://qiita.com/abcang/items/824681cb88676da4f9a8"
+        ],
+        "working_url": [
+          "https://jp.vuejs.org/v2/guide/index.html",
+          "https://gihyo.jp/dev/serial/01/vuejs",
+          "https://qiita.com/ferretdayo/items/edcd2b6682148e477104"
+        ]
+      }
+    },
+    "MobileApp": {
+			"JavaScript": {
+				"fw": "React Native",
+				"app": "文字を表示するアプリ",
+				"working_url": [
+					"https://qiita.com/YutamaKotaro/items/dd7846c6db15e2307daa",
+					"https://facebook.github.io/react-native/docs/getting-started.html#content"
+				]	
+			},
+			"Java": {
+				"fw": "Java",
+				"working_url": [
+					"https://qiita.com/YutamaKotaro/items/dd7846c6db15e2307daa",
+					"https://facebook.github.io/react-native/docs/getting-started.html#content"
+				]	
+			}
+		}
+
+	},
+  "senior": {}
+}

@@ -62,6 +62,17 @@ pub fn init(conn: &PgConnection) -> Result<usize, Error> {
         .execute(conn)
 }
 
+pub fn get_all(conn: &PgConnection) -> Result<Vec<Tag>, Error> {
+    tags::table.load::<Tag>(conn)
+}
+
+pub fn get_by_product_id(conn: &PgConnection, product_id: &i32) -> Result<Vec<i32>, Error> {
+    products_tags::table
+        .select(products_tags::tag_id)
+        .filter(products_tags::product_id.eq(product_id))
+        .load::<i32>(conn)
+}
+
 pub fn entry_to_product(
     conn: &PgConnection,
     product_id: i32,

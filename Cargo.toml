@@ -29,6 +29,8 @@ rusoto_core = "0.40.0"
 rusoto_s3 = "0.40.0"
 futures = "0.1.28"
 base64 = "0.10.1"
+regex = "1"
+lazy_static = "1.4.0"
 
 [dependencies.rocket_contrib]
 version = "0.4.2"
