@@ -45,7 +45,8 @@ pub fn establish_connection() -> PgConnection {
     PgConnection::establish(&database_url).expect(&format!("Error connecting to {}", database_url))
 }
 pub fn rocket() -> rocket::Rocket {
-    let allowed_origins = AllowedOrigins::some_exact(&["http://localhost:3000"]);
+    let allowed_origins =
+        AllowedOrigins::some_exact(&["http://localhost:3000", "https://tentech.netlify.com"]);
 
     let cors = rocket_cors::CorsOptions {
         allowed_origins,
