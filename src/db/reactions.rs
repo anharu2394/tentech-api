@@ -80,11 +80,19 @@ pub fn get_by_product_id(conn: &PgConnection, product_id: &i32) -> Result<Vec<Re
 pub fn get_by_user_id(
     conn: &PgConnection,
     user_id: &i32,
-) -> Result<Vec<(User, (Product, Reaction))>, Error> {
-    users::table
+) -> Result<Vec<(Product, Reaction, User)>, Error> {
+    let resources: Vec<_> = users::table
         .inner_join(products::table.inner_join(reactions::table))
         .filter(users::id.eq(user_id))
         .order(reactions::created_at.desc())
         .limit(20)
-        .load::<(User, (Product, Reaction))>(conn)
+        .load::<(User, (Product, Reaction))>(conn)?;
+    let new_resources: Vec<(Product, Reaction, User)> = resources
+        .iter()
+        .map(|r| {
+            let by = db::users::find(conn, &(&r.1).1.user_id).unwrap();
+            ((r.1).0.clone(), (r.1).1.clone(), by)
+        })
+        .collect();
+    Ok(new_resources)
 }
