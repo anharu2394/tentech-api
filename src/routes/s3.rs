@@ -45,5 +45,7 @@ pub fn upload(
         .put_object(request)
         .sync()
         .map(|a| json!({ "asset": CreatedAsset { url: format!("https://tentech.s3-ap-northeast-1.amazonaws.com/{}",new_asset.key)}}))
-        .map_err(|_| TentechError::CannotPutS3Object)
+        .map_err(|e| {
+            println!("{}",e);
+            TentechError::CannotPutS3Object})
 }
