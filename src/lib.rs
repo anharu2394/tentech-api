@@ -16,7 +16,7 @@ mod error;
 mod models;
 mod routes;
 mod s3;
-mod schema;
+pub mod schema;
 mod token;
 mod validation;
 
