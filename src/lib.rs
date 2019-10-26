@@ -34,7 +34,7 @@ use std::io::Cursor;
 pub fn test_establish_connection() -> PgConnection {
     dotenv().ok();
 
-    let database_url = env::var("DATABASE_TEST_URL").expect("DATABASE_URL must be set");
+    let database_url = env::var("DATABASE_TEST_URL").expect("DATABASE_TEST_URL must be set");
     PgConnection::establish(&database_url).expect(&format!("Error connecting to {}", database_url))
 }
 
