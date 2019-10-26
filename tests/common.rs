@@ -24,8 +24,9 @@ pub fn test_client() -> Client {
 }
 
 pub fn delete_all_users() {
-    db::users::delete_all(&test_establish_connection()).expect("failed");
-    let count = users::table.select(count_star()).first(&test_establish_connection());
+    let conn = test_establish_connection();
+    db::users::delete_all(&conn).expect("failed");
+    let count = users::table.select(count_star()).first(&conn);
     assert_eq!(Ok(0), count);
 }
 
