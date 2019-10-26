@@ -148,26 +148,3 @@ pub fn get(username: String, conn: db::Conn) -> Result<JsonValue, TentechError> 
         .map_err(|e| TentechError::DatabaseFailed(format!("{}", e)))
         .map(|u| json!({ "user": u }))
 }
-#[cfg(test)]
-mod test {
-    use crate::db;
-    use crate::rocket;
-    use crate::test_establish_connection;
-    use rocket::http::{ContentType, Status};
-    use rocket::local::Client;
-
-    fn setup() {
-        db::users::delete_all(&test_establish_connection());
-    }
-    #[test]
-    fn post_users() {
-        setup();
-        let client = Client::new(rocket()).expect("valid rocket instance");
-        let mut response = client
-            .post("/users")
-            .header(ContentType::JSON)
-            .body("{\"user\": {\"username\": \"anharu2394\", \"nickname\": \"anharu\", \"email\": \"email@test.com\", \"password\": \"passpassword\"}}")
-            .dispatch();
-        assert_eq!(response.status(), Status::Ok);
-    }
-}
