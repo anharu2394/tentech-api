@@ -3,12 +3,13 @@ mod common;
 use common::*;
 use rocket::http::{ContentType, Status};
 
-fn after() {
+fn setup() {
     delete_all_users();
 }
 
 #[test]
 fn post_users() {
+    setup();
     let client = test_client();
     let mut res = client
         .post("/users")
@@ -17,11 +18,11 @@ fn post_users() {
         .dispatch();
     print_response(&mut res);
     assert_eq!(res.status(), Status::Ok);
-    after();
 }
 
 #[test]
 fn post_same_username() {
+    before();
     create_user("same_user");
     let client = test_client();
     let mut res = client
@@ -31,11 +32,11 @@ fn post_same_username() {
         .dispatch();
     assert_eq!(res.status(), Status::Conflict);
     assert_eq!(res.body_string(),Some("{\"message\":\"duplicate key value violates unique constraint \\\"users_username_key\\\"\",\"type\":\"DatabaseFailed\"}".to_string()));
-    after();
 }
 
 #[test]
 fn post_same_email() {
+    before();
     create_user("same_email");
     let client = test_client();
     let mut res = client
@@ -45,11 +46,12 @@ fn post_same_email() {
         .dispatch();
     assert_eq!(res.status(), Status::Conflict);
     assert_eq!(res.body_string(),Some("{\"message\":\"duplicate key value violates unique constraint \\\"users_email_key\\\"\",\"type\":\"DatabaseFailed\"}".to_string()));
-    after();
+
 }
 
 #[test]
 fn login() {
+    before();
     create_user("login");
     let client = test_client();
     let mut res = client
@@ -59,11 +61,11 @@ fn login() {
         .dispatch();
     print_response(&mut res);
     assert_eq!(res.status(), Status::Ok);
-    after();
 }
 
 #[test]
 fn get_user() {
+    before();
     create_user("get");
     let client = test_client();
     let mut res = client
@@ -71,5 +73,4 @@ fn get_user() {
         .dispatch();
     print_response(&mut res);
     assert_eq!(res.status(), Status::Ok);
-    after();
 }
